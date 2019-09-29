@@ -7,12 +7,13 @@
     <script type="module" src="{{url_for('todo-item.webcomponent')}}"></script>
   </head>
   <body>
-    <!-- https://datatables.net/extensions/scroller/examples/styling/jqueryui.html -->
       <table id="example" class="display nowrap" style="width:100%">
           <thead>
               <tr>
+                  <th>index</th>
                   <th>todo</th>
                   <th>accountant</th>
+                  <th>progress</th>
               </tr>
           </thead>
       </table>
@@ -20,10 +21,25 @@
   <ul-todo-item></ul-todo-item>
   <script type="module">
     import {DataTable} from "/static/simple-datatables.js";
-      const dataTable = new DataTable("#example", {  ajax: {
-          url: "{{url_for('data')}}",
-          type: "json"
-      }});
+    const get = async (url) => { return (await fetch(url)).json(); }
+    const dataTable = new DataTable("#example", {  ajax: {
+      url: "{{url_for('data')}}",
+      type: "json"
+    }});
+    dataTable.columns().sort(0, 'asc');
+    io().on("<class '__main__.Todo'>update", function(index) {
+      get("/Todo/"+index).then(todo => {
+        // Fix display problems: Convert all values to string
+        Object.keys(todo).forEach(function(key) {
+          todo[key] = String(todo[key])
+        });
+        // Update the row index by deleting it and adding again at the end
+        // Limitation: datatable require fixed rows orders, like a primary key column
+        dataTable.rows().remove(index-1);
+        dataTable.insert([todo]);
+        dataTable.columns().sort(0, 'asc');
+      });
+    });
   </script>
   </body>
 </html>

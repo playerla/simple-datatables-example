@@ -1,5 +1,5 @@
 tasks:
-  - before: pip3 install flask-socketio-lit-html
+  - before: pip3 install flask-socketio-lit-html requests
     command: python3 app.py
 ports:
   - port: 5000

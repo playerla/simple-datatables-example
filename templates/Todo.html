@@ -9,7 +9,8 @@
 {% block form %}
 <form onsubmit="return false;">
     <input type="text" id="todo" value="task">
-    <p id ="accountant" value="Bastien"></p>
+    <p id ="accountant" value="Name"></p>
+    <p id ="progress" value="0%"></p>
     <button id="submit-button" @click="${ this.add_event }">Add</button>
 </form>
 {% endblock %}
