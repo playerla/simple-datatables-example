@@ -27,7 +27,7 @@
       type: "json"
     }});
     dataTable.columns().sort(0, 'asc');
-    io().on("<class '__main__.Todo'>update", function(index) {
+    io().on("Todo.update", function(index) {
       get("/Todo/"+index).then(todo => {
         // Fix display problems: Convert all values to string
         Object.keys(todo).forEach(function(key) {
